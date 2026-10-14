@@ -1,0 +1,78 @@
+@import "tailwindcss";
+
+/* =============================================================================
+   Cerro · design system
+   Cores extraídas da logo: verde-escuro (#2a361d) = marca/ação/texto forte,
+   verde-sálvia (#8aa650) = acento. Ver DESIGN.md.
+   ============================================================================= */
+
+:root {
+  --color-bg: #f4f4ef;
+  --color-surface: #ffffff;
+  --color-line: #dcdfd3;
+  --color-strong-line: #b4baa8;
+  --color-ink: #1f2618;
+  --color-muted: #6a7060;
+
+  --color-brand: #2a361d;
+  --color-brand-hover: #3b4a2a;
+  --color-sage: #8aa650;
+  --color-sage-soft: #e6ecd8;
+  --color-alert: #a8170f;
+}
+
+@theme inline {
+  --color-bg: var(--color-bg);
+  --color-surface: var(--color-surface);
+  --color-line: var(--color-line);
+  --color-strong-line: var(--color-strong-line);
+  --color-ink: var(--color-ink);
+  --color-muted: var(--color-muted);
+  --color-brand: var(--color-brand);
+  --color-brand-hover: var(--color-brand-hover);
+  --color-sage: var(--color-sage);
+  --color-sage-soft: var(--color-sage-soft);
+  --color-alert: var(--color-alert);
+
+  --font-sans: var(--font-inter);
+  --font-display: var(--font-archivo);
+}
+
+@layer base {
+  body {
+    @apply bg-bg text-ink font-sans;
+  }
+  * {
+    border-color: var(--color-line);
+  }
+}
+
+@layer components {
+  /* Rótulo pequeno em caixa alta (labels, cabeçalhos de tabela) */
+  .eyebrow {
+    @apply text-[11px] font-medium tracking-[0.14em] uppercase text-muted;
+  }
+
+  /* Campo de texto */
+  .campo {
+    @apply block w-full rounded-md border border-line bg-surface px-3 py-2.5 text-[15px] text-ink outline-none transition-colors placeholder:text-muted/60 focus:border-brand;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-md border border-line bg-surface px-4 py-2.5 text-sm font-semibold text-ink transition-colors hover:border-strong-line disabled:cursor-not-allowed disabled:opacity-50;
+  }
+  .btn-primario {
+    @apply border-brand bg-brand text-white hover:border-brand-hover hover:bg-brand-hover;
+  }
+
+  /* Selo de condição (B/R/Ru/NT/NA) — usado no formulário e no PDF */
+  .selo {
+    @apply inline-flex items-center justify-center rounded-[3px] border font-bold leading-none;
+  }
+  .selo-B { background: var(--color-brand); border-color: var(--color-brand); color: #fff; }
+  .selo-R { background: var(--color-sage-soft); border-color: var(--color-brand); color: var(--color-brand); }
+  .selo-Ru { background: var(--color-alert); border-color: var(--color-alert); color: #fff; }
+  .selo-NT,
+  .selo-NA { background: #fff; border-color: var(--color-strong-line); color: var(--color-ink); }
+  .selo-off { background: #fff; border-color: var(--color-line); color: #a7ab9f; font-weight: 500; }
+}
