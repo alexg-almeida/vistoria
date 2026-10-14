@@ -300,7 +300,8 @@ export function montarBlocos(v: Vistoria, d: Dados, fotos: Foto[], fotoSrc: Reco
     ),
   });
 
-  // 8. Ciência
+  // 8. Ciência — data de geração do documento (fuso de Brasília; a prévia roda no servidor em UTC)
+  const dataImpressao = new Date().toLocaleDateString("pt-BR", { timeZone: "America/Sao_Paulo" });
   const assinatura = (nome: string | null, papel: string) => (
     <div>
       <p className="min-h-[16px] text-[11px] font-semibold">{nome}</p>
@@ -324,7 +325,7 @@ export function montarBlocos(v: Vistoria, d: Dados, fotos: Foto[], fotoSrc: Reco
           {assinatura(v.corretor, "Corretor(a)")}
         </div>
         <p className="mt-10 text-[10px] text-muted">
-          Data <span className="ml-2 inline-block w-[150px] border-b border-ink text-center text-ink">/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/</span>
+          Data <span className="ml-2 inline-block w-[150px] border-b border-ink text-center text-ink">{dataImpressao}</span>
         </p>
         <p className="mt-8 text-[9.5px] leading-[1.6] text-muted">
           As assinaturas registram ciência das observações descritas, sem substituir as obrigações e condições previstas no instrumento contratual
