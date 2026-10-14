@@ -11,7 +11,8 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   if (!user) redirect("/login");
 
   // auth.users é compartilhado com o Atma CRM: estar logado não basta.
-  const { data: temAcesso } = await supabase.rpc("vistoria_tem_acesso");
+  const { data: temAcesso, error } = await supabase.rpc("vistoria_tem_acesso");
+  if (error) throw new Error(`Banco da vistoria não configurado (migration aplicada?): ${error.message}`);
 
   return (
     <>
