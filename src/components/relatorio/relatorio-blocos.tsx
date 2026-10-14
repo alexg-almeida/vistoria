@@ -30,8 +30,8 @@ const vazio = (s: string | null | undefined) => !s || !s.trim();
 
 function Selo({ c, ativo = true, tamanho = "md" }: { c: Condicao; ativo?: boolean; tamanho?: "sm" | "md" }) {
   const dims = tamanho === "sm" ? "h-[17px] w-[26px] text-[9px]" : "h-[20px] w-[34px] text-[10px]";
-  if (!c) return <span className={`selo selo-off ${dims}`}>—</span>;
-  return <span className={`selo ${dims} ${ativo ? `selo-${c}` : "selo-off"}`}>{c}</span>;
+  if (!c) return <span className={`selo selo-vazio ${dims}`}>—</span>;
+  return <span className={`selo ${dims} ${ativo ? `selo-${c}` : `selo-${c}-off`}`}>{c}</span>;
 }
 
 function TituloSecao({ n, titulo }: { n: number; titulo: string }) {

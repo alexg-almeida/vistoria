@@ -69,10 +69,18 @@
   .selo {
     @apply inline-flex items-center justify-center rounded-[3px] border font-bold leading-none;
   }
-  .selo-B { background: var(--color-brand); border-color: var(--color-brand); color: #fff; }
-  .selo-R { background: var(--color-sage-soft); border-color: var(--color-brand); color: var(--color-brand); }
-  .selo-Ru { background: var(--color-alert); border-color: var(--color-alert); color: #fff; }
-  .selo-NT,
-  .selo-NA { background: #fff; border-color: var(--color-strong-line); color: var(--color-ink); }
-  .selo-off { background: #fff; border-color: var(--color-line); color: #a7ab9f; font-weight: 500; }
+  /* Uma cor por condição. Marcado = preenchido; não marcado (-off) = fundo
+     claro da mesma cor, para o vistoriador reconhecer a opção antes de tocar.
+     Hex puros (sem color-mix) porque o PDF é capturado com html2canvas. */
+  .selo-B { background: #4d7c2a; border-color: #4d7c2a; color: #fff; }
+  .selo-R { background: #e0a526; border-color: #e0a526; color: #3a2a05; }
+  .selo-Ru { background: #b42318; border-color: #b42318; color: #fff; }
+  .selo-NT { background: #3f6687; border-color: #3f6687; color: #fff; }
+  .selo-NA { background: #767b70; border-color: #767b70; color: #fff; }
+  .selo-B-off { background: #f1f6ea; border-color: #d3e2c1; color: #4d7c2a; }
+  .selo-R-off { background: #fdf6e6; border-color: #f0dba8; color: #9a6a00; }
+  .selo-Ru-off { background: #fdf0ef; border-color: #f1c7c3; color: #b42318; }
+  .selo-NT-off { background: #eef3f8; border-color: #cbd8e4; color: #3f6687; }
+  .selo-NA-off { background: #f3f4f1; border-color: #dcded8; color: #6a7060; }
+  .selo-vazio { background: #fff; border-color: var(--color-line); color: #a7ab9f; font-weight: 500; }
 }

@@ -2,15 +2,16 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { ArrowLeft, Check, FilePdf, Plus, Trash } from "@phosphor-icons/react";
+import { ArrowLeft, Check, Eye, FilePdf, Plus, Trash } from "@phosphor-icons/react";
 import { createClient } from "@/lib/supabase/client";
 import { FotosAmbiente } from "@/components/fotos-ambiente";
 import { GerarPdfButton } from "@/components/relatorio/gerar-pdf-button";
+import { ExcluirVistoriaButton } from "@/components/excluir-vistoria-button";
 import {
   AMBIENTES,
   BUCKET,
   CONDICOES,
+  CONDICAO_LABEL,
   ESTADOS_GERAIS,
   MOVEIS,
   TESTES,
@@ -24,14 +25,32 @@ import {
 
 type Status = "salvo" | "pendente" | "salvando" | "erro";
 
+function salvar(v: Vistoria, d: Dados) {
+  return createClient()
+    .from("vistoria_relatorios")
+    .update({
+      edificio: v.edificio,
+      endereco: v.endereco,
+      apartamento: v.apartamento,
+      proprietario: v.proprietario,
+      corretor: v.corretor,
+      data_vistoria: v.data_vistoria || null,
+      area_privativa: v.area_privativa,
+      vagas: v.vagas,
+      situacao: v.situacao,
+      dados: d,
+    })
+    .eq("id", v.id);
+}
+
 export function VistoriaForm({ inicial, fotosIniciais }: { inicial: Vistoria; fotosIniciais: Foto[] }) {
-  const router = useRouter();
   const [v, setV] = useState<Vistoria>(inicial);
   const [d, setD] = useState<Dados>(() => normalizarDados(inicial.dados));
   const [fotos, setFotos] = useState<Foto[]>(fotosIniciais);
   const [urls, setUrls] = useState<Record<string, string>>({});
   const [status, setStatus] = useState<Status>("salvo");
   const primeiro = useRef(true);
+  const pendente = useRef<{ v: Vistoria; d: Dados } | null>(null);
 
   // ---------- Salvamento automático (debounce) ----------
   useEffect(() => {
@@ -39,28 +58,24 @@ export function VistoriaForm({ inicial, fotosIniciais }: { inicial: Vistoria; fo
       primeiro.current = false;
       return;
     }
+    pendente.current = { v, d };
     setStatus("pendente");
     const t = setTimeout(async () => {
+      pendente.current = null;
       setStatus("salvando");
-      const { error } = await createClient()
-        .from("vistoria_relatorios")
-        .update({
-          edificio: v.edificio,
-          endereco: v.endereco,
-          apartamento: v.apartamento,
-          proprietario: v.proprietario,
-          corretor: v.corretor,
-          data_vistoria: v.data_vistoria || null,
-          area_privativa: v.area_privativa,
-          vagas: v.vagas,
-          situacao: v.situacao,
-          dados: d,
-        })
-        .eq("id", v.id);
+      const { error } = await salvar(v, d);
       setStatus(error ? "erro" : "salvo");
     }, 800);
     return () => clearTimeout(t);
   }, [v, d]);
+
+  // Saiu da tela antes do debounce disparar: grava o que ficou pendente
+  useEffect(
+    () => () => {
+      if (pendente.current) salvar(pendente.current.v, pendente.current.d);
+    },
+    [],
+  );
 
   // Avisa antes de sair com alteração ainda não salva
   useEffect(() => {
@@ -94,14 +109,6 @@ export function VistoriaForm({ inicial, fotosIniciais }: { inicial: Vistoria; fo
 
   function setAmbiente(id: string, patch: Partial<Dados["ambientes"][string]>) {
     setD({ ...d, ambientes: { ...d.ambientes, [id]: { ...d.ambientes[id], ...patch } } });
-  }
-
-  async function excluirVistoria() {
-    if (!confirm("Excluir esta vistoria? Ela deixará de aparecer na lista.")) return;
-    const { error } = await createClient().from("vistoria_relatorios").update({ ativo: false }).eq("id", v.id);
-    if (error) return alert("Não foi possível excluir.");
-    router.push("/");
-    router.refresh();
   }
 
   const fotosProps = { vistoriaId: v.id, fotos, numeros, urls, onChange: setFotos };
@@ -283,16 +290,21 @@ export function VistoriaForm({ inicial, fotosIniciais }: { inicial: Vistoria; fo
         </div>
       </Secao>
 
-      <button type="button" onClick={excluirVistoria} className="text-sm text-muted hover:text-alert">
-        Excluir vistoria
-      </button>
+      <div className="pt-2">
+        <ExcluirVistoriaButton id={v.id} nome={[v.edificio || "Sem nome", v.apartamento && `Ap. ${v.apartamento}`].filter(Boolean).join(" · ")} />
+      </div>
 
       <div className="fixed inset-x-0 bottom-0 z-20 border-t bg-surface/95 backdrop-blur">
         <div className="mx-auto flex max-w-3xl items-center justify-between gap-3 px-4 py-3">
           <StatusSalvo status={status} />
-          <GerarPdfButton vistoria={v} dados={d} fotos={fotosOrdenadas} disabled={status === "pendente" || status === "salvando"}>
-            <FilePdf size={18} weight="bold" /> Gerar PDF
-          </GerarPdfButton>
+          <div className="flex gap-2">
+            <Link href={`/vistorias/${v.id}`} className={`btn ${status === "pendente" || status === "salvando" ? "pointer-events-none opacity-50" : ""}`}>
+              <Eye size={18} /> Ver
+            </Link>
+            <GerarPdfButton vistoria={v} dados={d} fotos={fotosOrdenadas} disabled={status === "pendente" || status === "salvando"}>
+              <FilePdf size={18} weight="bold" /> Gerar PDF
+            </GerarPdfButton>
+          </div>
         </div>
       </div>
     </div>
@@ -336,7 +348,7 @@ function LinhaCondicao({ texto, valor, onChange, destaque }: { texto: string; va
             type="button"
             aria-pressed={valor === c}
             onClick={() => onChange(valor === c ? "" : c)}
-            className={`selo h-9 w-11 text-xs ${valor === c ? `selo-${c}` : "selo-off"}`}
+            className={`selo h-9 w-11 text-xs ${valor === c ? `selo-${c}` : `selo-${c}-off`}`}
           >
             {c}
           </button>
@@ -368,7 +380,14 @@ function Opcoes({ opcoes, valor, onChange }: { opcoes: string[][]; valor: string
 
 function Legenda() {
   return (
-    <p className="hidden text-[11px] text-muted sm:block">B Bom · R Regular · Ru Ruim · NT Não testado · NA Não se aplica</p>
+    <p className="flex flex-wrap justify-end gap-x-2.5 gap-y-1 text-[11px] text-muted">
+      {CONDICOES.map((c) => (
+        <span key={c} className="inline-flex items-center gap-1">
+          <span className={`selo selo-${c} h-4 w-6 text-[9px]`}>{c}</span>
+          {CONDICAO_LABEL[c]}
+        </span>
+      ))}
+    </p>
   );
 }
 
