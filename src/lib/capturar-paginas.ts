@@ -1,4 +1,4 @@
-import html2canvas from "html2canvas";
+import { domToJpeg } from "modern-screenshot";
 import { jsPDF } from "jspdf";
 
 /** Dimensões de uma página A4 retrato a 96dpi — mesma proporção do formato A4 em mm. */
@@ -26,7 +26,7 @@ export function validarPaginasSemOverflow(paginas: HTMLElement[]): void {
 
 /**
  * Espera todas as <img> dentro do container terminarem de carregar (ou falharem),
- * necessário antes de capturar com html2canvas — imagens ainda carregando saem
+ * necessário antes de capturar — imagens ainda carregando saem
  * em branco no canvas.
  */
 export async function aguardarImagens(container: HTMLElement): Promise<void> {
@@ -68,16 +68,16 @@ export async function capturarPaginasComoPdf(
     const pagina = paginas[i];
     await aguardarImagens(pagina);
 
-    // useCORS: fotos já chegam como blob: (mesma origem); mantido por
-    // segurança caso alguma imagem venha de outra origem.
-    const canvas = await html2canvas(pagina, {
+    // modern-screenshot (SVG foreignObject): quem desenha é o próprio
+    // navegador, então o texto sai idêntico à tela. O html2canvas recalculava
+    // o layout e desalinhava texto dentro de flex (selos, checkboxes).
+    const imgData = await domToJpeg(pagina, {
       scale: 2,
-      useCORS: true,
+      quality: 0.9,
       backgroundColor: "#ffffff",
-      logging: false,
+      width: A4_PX.width,
+      height: A4_PX.height,
     });
-
-    const imgData = canvas.toDataURL("image/jpeg", 0.92);
     if (i > 0) doc.addPage();
     doc.addImage(imgData, "JPEG", 0, 0, A4_MM.width, A4_MM.height);
   }

@@ -17,7 +17,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   return (
     <>
       <header className="sticky top-0 z-20 border-b border-brand/80 bg-bg/95 backdrop-blur">
-        <div className="mx-auto flex h-14 max-w-3xl items-center justify-between px-4">
+        <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4">
           <Link href="/" className="flex items-center gap-2.5">
             <Image src="/brand/cerro-simbolo.png" alt="" width={525} height={340} className="h-6 w-auto" />
             <span className="font-display text-[15px] font-bold tracking-wide text-brand">CERRO</span>
@@ -28,7 +28,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
           </form>
         </div>
       </header>
-      <main className="mx-auto max-w-3xl px-4 pb-28 pt-6">
+      <main className="mx-auto max-w-6xl px-4 pb-28 pt-6">
         {temAcesso ? (
           children
         ) : (

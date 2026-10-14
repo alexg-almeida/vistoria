@@ -47,7 +47,7 @@ export function GerarPdfButton({ vistoria, dados, fotos, disabled, children }: P
   async function gerar() {
     const objectUrls: string[] = [];
     try {
-      // 1. Baixa as fotos como blob (mesma origem para o html2canvas, sem CORS)
+      // 1. Baixa as fotos como blob (mesma origem para a captura, sem CORS)
       const fotoSrc: Record<string, string> = {};
       if (fotos.length) {
         setFase(`Carregando fotos…`);
@@ -129,7 +129,7 @@ export function GerarPdfButton({ vistoria, dados, fotos, disabled, children }: P
                 style={{ width: A4_PX.width, height: A4_PX.height }}
                 className="relative overflow-hidden bg-white text-ink"
               >
-                <div className="absolute inset-x-0 top-0 flex h-[52px] items-end justify-between border-b-2 border-ink px-14 pb-3 text-[9.5px] tracking-[0.14em] uppercase">
+                <div className="absolute inset-x-0 top-0 flex h-[52px] items-end justify-between border-b-2 border-ink px-14 pb-3 text-[8.5px] tracking-[0.14em] uppercase">
                   <span>Cerro Imóveis</span>
                   <span>{cabecalho}</span>
                 </div>
@@ -138,7 +138,7 @@ export function GerarPdfButton({ vistoria, dados, fotos, disabled, children }: P
                     <div key={b.id}>{b.node}</div>
                   ))}
                 </div>
-                <div className="absolute inset-x-0 bottom-0 flex h-[44px] items-start justify-between border-t border-line px-14 pt-3 text-[10px] text-muted">
+                <div className="absolute inset-x-0 bottom-0 flex h-[44px] items-start justify-between border-t border-line px-14 pt-3 text-[9px] text-muted">
                   <span>Vistoria realizada em {formatarData(vistoria.data_vistoria)}</span>
                   <span>
                     Documento de registro de condições aparentes · {i + 1}/{paginas.length}

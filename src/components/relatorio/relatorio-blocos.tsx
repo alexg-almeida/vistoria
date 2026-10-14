@@ -1,4 +1,4 @@
-/* eslint-disable @next/next/no-img-element -- html2canvas captura <img> comum, não next/image */
+/* eslint-disable @next/next/no-img-element -- a captura do PDF usa <img> comum, não next/image */
 import {
   AMBIENTES,
   AMBIENTES_FOTO,
@@ -29,14 +29,14 @@ const vazio = (s: string | null | undefined) => !s || !s.trim();
 // ---------- Peças visuais ----------
 
 function Selo({ c, ativo = true, tamanho = "md" }: { c: Condicao; ativo?: boolean; tamanho?: "sm" | "md" }) {
-  const dims = tamanho === "sm" ? "h-[17px] w-[26px] text-[9px]" : "h-[20px] w-[34px] text-[10px]";
+  const dims = tamanho === "sm" ? "h-[15px] w-[24px] text-[8px]" : "h-[17px] w-[30px] text-[9px]";
   if (!c) return <span className={`selo selo-vazio ${dims}`}>—</span>;
   return <span className={`selo ${dims} ${ativo ? `selo-${c}` : `selo-${c}-off`}`}>{c}</span>;
 }
 
 function TituloSecao({ n, titulo }: { n: number; titulo: string }) {
   return (
-    <h2 className="border-b-2 border-ink pb-2 font-display text-[17px] font-bold text-brand">
+    <h2 className="border-b-2 border-ink pb-2 font-display text-[15px] font-bold text-brand">
       <span className="mr-3">{n}.</span>
       {titulo}
     </h2>
@@ -44,12 +44,12 @@ function TituloSecao({ n, titulo }: { n: number; titulo: string }) {
 }
 
 function Rotulo({ children }: { children: React.ReactNode }) {
-  return <p className="text-[9.5px] font-medium tracking-[0.14em] text-muted uppercase">{children}</p>;
+  return <p className="text-[8.5px] font-medium tracking-[0.14em] text-muted uppercase">{children}</p>;
 }
 
 function Marcador({ marcado, children }: { marcado: boolean; children: React.ReactNode }) {
   return (
-    <span className={`mr-5 inline-flex items-center gap-2 text-[12.5px] ${marcado ? "font-semibold text-ink" : "text-muted"}`}>
+    <span className={`mr-5 inline-flex items-center gap-2 text-[11px] ${marcado ? "font-semibold text-ink" : "text-muted"}`}>
       <span className={`inline-block h-[11px] w-[11px] border ${marcado ? "border-brand bg-brand" : "border-strong-line bg-white"}`} />
       {children}
     </span>
@@ -65,7 +65,7 @@ function Observacoes({ texto, rotulo = "Observações" }: { texto: string; rotul
       {vazio(texto) ? (
         <div className="mt-3 flex-1 border-b border-line" />
       ) : (
-        <p className="flex-1 whitespace-pre-line text-[12.5px] leading-[1.6]">{texto}</p>
+        <p className="flex-1 whitespace-pre-line text-[11px] leading-[1.6]">{texto}</p>
       )}
     </div>
   );
@@ -83,8 +83,8 @@ export function montarBlocos(v: Vistoria, d: Dados, fotos: Foto[], fotoSrc: Reco
       <div className="pb-7">
         <div className="flex items-end justify-between border-b-2 border-ink pb-7">
           <div>
-            <p className="text-[10.5px] font-semibold tracking-[0.2em] text-sage uppercase">Cerro Imóveis · Vistoria</p>
-            <h1 className="mt-2 font-display text-[34px] leading-[1.05] font-extrabold text-brand">
+            <p className="text-[9.5px] font-semibold tracking-[0.2em] text-sage uppercase">Cerro Imóveis · Vistoria</p>
+            <h1 className="mt-2 font-display text-[28px] leading-[1.05] font-extrabold text-brand">
               Relatório de
               <br />
               Vistoria de Imóvel
@@ -100,7 +100,7 @@ export function montarBlocos(v: Vistoria, d: Dados, fotos: Foto[], fotoSrc: Reco
   const cel = (rotulo: string, valor: string | null | undefined, i: number) => (
     <div key={rotulo} className={`border-b border-line py-3 ${i % 2 === 0 ? "border-r pr-4" : "pl-4"}`}>
       <Rotulo>{rotulo}</Rotulo>
-      <p className="mt-1.5 min-h-[18px] text-[13.5px] font-semibold">{valor || ""}</p>
+      <p className="mt-1.5 min-h-[16px] text-[12px] font-semibold">{valor || ""}</p>
     </div>
   );
   add({
@@ -138,7 +138,7 @@ export function montarBlocos(v: Vistoria, d: Dados, fotos: Foto[], fotoSrc: Reco
     node: (
       <div className="pb-6">
         <TituloSecao n={2} titulo="Checklist de conservação" />
-        <div className="mt-3 flex items-center gap-4 text-[11.5px]">
+        <div className="mt-3 flex items-center gap-4 text-[10.5px]">
           <span className="text-muted">Condição observada:</span>
           {CONDICOES.map((c) => (
             <span key={c} className="inline-flex items-center gap-1.5">
@@ -157,16 +157,16 @@ export function montarBlocos(v: Vistoria, d: Dados, fotos: Foto[], fotoSrc: Reco
       node: (
         <div className="pb-7">
           <div className="flex items-center justify-between border-b-2 border-ink pb-2">
-            <h3 className="font-display text-[14px] font-bold">{a.nome}</h3>
+            <h3 className="font-display text-[12.5px] font-bold">{a.nome}</h3>
             <div className="flex items-center gap-1">
-              <span className="mr-2 text-[9.5px] font-medium tracking-[0.14em] text-muted uppercase">Condição</span>
+              <span className="mr-2 text-[8.5px] font-medium tracking-[0.14em] text-muted uppercase">Condição</span>
               {CONDICOES.map((c) => (
                 <Selo key={c} c={c} tamanho="sm" ativo={amb.condicao === c} />
               ))}
             </div>
           </div>
           {a.itens.map((item, i) => (
-            <div key={i} className="flex items-center gap-3 border-b border-line py-[7px] text-[12.5px]">
+            <div key={i} className="flex items-center gap-3 border-b border-line py-[5px] text-[11px]">
               <Selo c={amb.itens[i] ?? ""} />
               {item}
             </div>
@@ -185,7 +185,7 @@ export function montarBlocos(v: Vistoria, d: Dados, fotos: Foto[], fotoSrc: Reco
         <TituloSecao n={3} titulo="Testes de instalações e equipamentos" />
         <div className="grid grid-cols-2 gap-x-6">
           {TESTES.map((t, i) => (
-            <div key={i} className="flex items-center gap-3 border-b border-line py-[7px] text-[12.5px]">
+            <div key={i} className="flex items-center gap-3 border-b border-line py-[5px] text-[11px]">
               <Selo c={d.testes[i] ?? ""} />
               {t}
             </div>
@@ -203,7 +203,7 @@ export function montarBlocos(v: Vistoria, d: Dados, fotos: Foto[], fotoSrc: Reco
     node: (
       <div className={ocorrencias.length ? "" : "pb-8"}>
         <TituloSecao n={4} titulo="Avarias, defeitos e pendências" />
-        {!ocorrencias.length && <p className="pt-3 text-[12.5px] text-muted">Nenhuma ocorrência registrada.</p>}
+        {!ocorrencias.length && <p className="pt-3 text-[11px] text-muted">Nenhuma ocorrência registrada.</p>}
       </div>
     ),
   });
@@ -212,8 +212,8 @@ export function montarBlocos(v: Vistoria, d: Dados, fotos: Foto[], fotoSrc: Reco
       id: `oc-${i}`,
       node: (
         <div className={`flex gap-6 border-b border-line py-3 ${i === ocorrencias.length - 1 ? "mb-8" : ""}`}>
-          <p className="w-[110px] shrink-0 text-[12.5px] font-bold">Ocorrência {i + 1}</p>
-          <div className="flex-1 space-y-1.5 text-[12.5px]">
+          <p className="w-[110px] shrink-0 text-[11px] font-bold">Ocorrência {i + 1}</p>
+          <div className="flex-1 space-y-1.5 text-[11px]">
             {[
               ["Ambiente/local", o.ambiente],
               ["Descrição", o.descricao],
@@ -237,13 +237,13 @@ export function montarBlocos(v: Vistoria, d: Dados, fotos: Foto[], fotoSrc: Reco
     node: (
       <div className="pb-8">
         <TituloSecao n={5} titulo="Móveis e equipamentos que permanecerão no imóvel" />
-        <div className="grid grid-cols-[200px_1fr_140px] border-b border-ink py-2 text-[9.5px] font-medium tracking-[0.14em] text-muted uppercase">
+        <div className="grid grid-cols-[200px_1fr_140px] border-b border-ink py-2 text-[8.5px] font-medium tracking-[0.14em] text-muted uppercase">
           <span>Item</span>
           <span>Quantidade/descrição</span>
           <span>Estado</span>
         </div>
         {MOVEIS.map((m, i) => (
-          <div key={i} className="grid grid-cols-[200px_1fr_140px] border-b border-line py-2.5 text-[12.5px]">
+          <div key={i} className="grid grid-cols-[200px_1fr_140px] border-b border-line py-2.5 text-[11px]">
             <span className="font-semibold">{m}</span>
             <span>{d.moveis[i]?.qtd}</span>
             <span>{d.moveis[i]?.estado}</span>
@@ -269,7 +269,7 @@ export function montarBlocos(v: Vistoria, d: Dados, fotos: Foto[], fotoSrc: Reco
           </div>
           <div className="py-3 pl-4">
             <Rotulo>Quantidade</Rotulo>
-            <p className="mt-1.5 text-[13.5px] font-semibold">{fotos.length ? `${fotos.length} · ver Anexo` : "—"}</p>
+            <p className="mt-1.5 text-[12px] font-semibold">{fotos.length ? `${fotos.length} · ver Anexo` : "—"}</p>
           </div>
         </div>
       </div>
@@ -289,7 +289,7 @@ export function montarBlocos(v: Vistoria, d: Dados, fotos: Foto[], fotoSrc: Reco
           {ESTADOS_GERAIS.map((e) => (
             <div
               key={e}
-              className={`h-[60px] border p-3 text-[12.5px] ${d.estado_geral === e ? "border-brand bg-brand font-semibold text-white" : "border-line text-muted"}`}
+              className={`h-[60px] border p-3 text-[11px] ${d.estado_geral === e ? "border-brand bg-brand font-semibold text-white" : "border-line text-muted"}`}
             >
               {e}
             </div>
@@ -303,11 +303,11 @@ export function montarBlocos(v: Vistoria, d: Dados, fotos: Foto[], fotoSrc: Reco
   // 8. Ciência
   const assinatura = (nome: string | null, papel: string) => (
     <div>
-      <p className="min-h-[18px] text-[12.5px] font-semibold">{nome}</p>
+      <p className="min-h-[16px] text-[11px] font-semibold">{nome}</p>
       <div className="border-b border-ink" />
-      <p className="mt-1.5 text-[11px] text-muted">{papel}</p>
+      <p className="mt-1.5 text-[10px] text-muted">{papel}</p>
       <div className="mt-12 border-b border-ink" />
-      <p className="mt-1.5 text-[11px] text-muted">Assinatura</p>
+      <p className="mt-1.5 text-[10px] text-muted">Assinatura</p>
     </div>
   );
   add({
@@ -315,7 +315,7 @@ export function montarBlocos(v: Vistoria, d: Dados, fotos: Foto[], fotoSrc: Reco
     node: (
       <div className="pb-4">
         <TituloSecao n={8} titulo="Ciência das partes" />
-        <p className="pt-3 text-[12.5px] leading-[1.65]">
+        <p className="pt-3 text-[11px] leading-[1.65]">
           Este relatório registra as condições aparentes verificadas na data da vistoria. Não constitui laudo técnico de engenharia, avaliação de
           valor de mercado ou confirmação de regularidade documental. A vistoria não substitui a análise jurídica e documental do imóvel.
         </p>
@@ -323,10 +323,10 @@ export function montarBlocos(v: Vistoria, d: Dados, fotos: Foto[], fotoSrc: Reco
           {assinatura(v.proprietario, "Proprietário(a)")}
           {assinatura(v.corretor, "Corretor(a)")}
         </div>
-        <p className="mt-10 text-[11px] text-muted">
+        <p className="mt-10 text-[10px] text-muted">
           Data <span className="ml-2 inline-block w-[150px] border-b border-ink text-center text-ink">/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/</span>
         </p>
-        <p className="mt-8 text-[10.5px] leading-[1.6] text-muted">
+        <p className="mt-8 text-[9.5px] leading-[1.6] text-muted">
           As assinaturas registram ciência das observações descritas, sem substituir as obrigações e condições previstas no instrumento contratual
           da negociação.
         </p>
@@ -342,9 +342,9 @@ export function montarBlocos(v: Vistoria, d: Dados, fotos: Foto[], fotoSrc: Reco
       manterComProximo: true,
       node: (
         <div className="pb-5">
-          <p className="text-[10.5px] font-semibold tracking-[0.2em] text-sage uppercase">Anexo</p>
+          <p className="text-[9.5px] font-semibold tracking-[0.2em] text-sage uppercase">Anexo</p>
           <div className="mt-1 flex items-end justify-between border-b-2 border-ink pb-2">
-            <h2 className="font-display text-[24px] font-extrabold text-brand">Registro fotográfico</h2>
+            <h2 className="font-display text-[20px] font-extrabold text-brand">Registro fotográfico</h2>
             <span className="text-[12px] text-muted">{fotos.length} fotos</span>
           </div>
         </div>
@@ -358,7 +358,7 @@ export function montarBlocos(v: Vistoria, d: Dados, fotos: Foto[], fotoSrc: Reco
       add({
         id: `fa-${amb.id}`,
         manterComProximo: true,
-        node: <h3 className="pb-3 font-display text-[14px] font-bold">{amb.nome}</h3>,
+        node: <h3 className="pb-3 font-display text-[12.5px] font-bold">{amb.nome}</h3>,
       });
       for (let i = 0; i < doAmb.length; i += 3) {
         const linha = doAmb.slice(i, i + 3).map((f) => ({ f, num: ++n }));
@@ -371,7 +371,7 @@ export function montarBlocos(v: Vistoria, d: Dados, fotos: Foto[], fotoSrc: Reco
                   <div className="h-[163px] overflow-hidden bg-line">
                     {fotoSrc[f.id] && <img src={fotoSrc[f.id]} alt="" className="h-full w-full object-cover" />}
                   </div>
-                  <figcaption className="mt-1.5 flex gap-2 text-[10.5px] leading-tight">
+                  <figcaption className="mt-1.5 flex gap-2 text-[9.5px] leading-tight">
                     <strong className="shrink-0">Foto {String(num).padStart(2, "0")}</strong>
                     <span className="text-muted">{f.legenda}</span>
                   </figcaption>

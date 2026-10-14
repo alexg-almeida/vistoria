@@ -4,6 +4,7 @@ import { carregarVistoria } from "@/lib/carregar-vistoria";
 import { BUCKET, normalizarDados } from "@/lib/vistoria";
 import { montarBlocos } from "@/components/relatorio/relatorio-blocos";
 import { GerarPdfButton } from "@/components/relatorio/gerar-pdf-button";
+import { FolhaA4 } from "@/components/relatorio/folha-a4";
 import { ExcluirVistoriaButton } from "@/components/excluir-vistoria-button";
 
 export default async function VerVistoriaPage({ params }: { params: Promise<{ id: string }> }) {
@@ -38,15 +39,13 @@ export default async function VerVistoriaPage({ params }: { params: Promise<{ id
       </div>
 
       {/* Prévia do relatório: mesmos blocos do PDF, numa folha com largura de A4 */}
-      <div className="overflow-x-auto rounded-md border bg-white shadow-sm">
-        <div className="w-[794px] px-14 py-12 text-ink">
-          {montarBlocos(vistoria, dados, fotos, fotoSrc).map((b) => (
-            <div key={b.id} className={b.quebraAntes ? "mt-10 border-t border-dashed pt-10" : ""}>
-              {b.node}
-            </div>
-          ))}
-        </div>
-      </div>
+      <FolhaA4>
+        {montarBlocos(vistoria, dados, fotos, fotoSrc).map((b) => (
+          <div key={b.id} className={b.quebraAntes ? "mt-10 border-t border-dashed pt-10" : ""}>
+            {b.node}
+          </div>
+        ))}
+      </FolhaA4>
     </>
   );
 }

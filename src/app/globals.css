@@ -55,7 +55,7 @@
 
   /* Campo de texto */
   .campo {
-    @apply block w-full rounded-md border border-line bg-surface px-3 py-2.5 text-[15px] text-ink outline-none transition-colors placeholder:text-muted/60 focus:border-brand;
+    @apply block w-full rounded-md border border-line bg-surface px-3 py-2.5 text-sm text-ink outline-none transition-colors placeholder:text-muted/60 focus:border-brand;
   }
 
   .btn {
@@ -71,7 +71,7 @@
   }
   /* Uma cor por condição. Marcado = preenchido; não marcado (-off) = fundo
      claro da mesma cor, para o vistoriador reconhecer a opção antes de tocar.
-     Hex puros (sem color-mix) porque o PDF é capturado com html2canvas. */
+     Hex puros para cor idêntica na tela e no PDF. */
   .selo-B { background: #4d7c2a; border-color: #4d7c2a; color: #fff; }
   .selo-R { background: #e0a526; border-color: #e0a526; color: #3a2a05; }
   .selo-Ru { background: #b42318; border-color: #b42318; color: #fff; }

@@ -26,8 +26,8 @@ Base: logo Cerro Imóveis (`public/brand/`). Tokens em `src/app/globals.css` (Ta
 
 - `.campo` — input/textarea.
 - `.btn`, `.btn-primario` — botões.
-- `.selo` + `.selo-B | -R | -Ru | -NT | -NA | -off` — selo de condição; o mesmo no formulário e no PDF.
+- `.selo` + `.selo-{B,R,Ru,NT,NA}` (marcado), `.selo-{X}-off` (não marcado, tom claro da mesma cor), `.selo-vazio` — selo de condição; o mesmo no formulário e no PDF. Cores: B `#4d7c2a`, R `#e0a526`, Ru `#b42318`, NT `#3f6687`, NA `#767b70`.
 
 ## PDF
 
-A4 (794×1123px) capturado com html2canvas → jsPDF. Cabeçalho com régua `ink` de 2px, rodapé com data e paginação, seções numeradas com régua de 2px. Não usar modificadores de opacidade do Tailwind (`/50`) dentro do PDF — geram `color-mix()`, que o html2canvas não interpreta.
+A4 (794×1123px) capturado com modern-screenshot (o próprio navegador desenha a página) → jsPDF. Cabeçalho com régua `ink` de 2px, rodapé com data e paginação, seções numeradas com régua de 2px.

@@ -123,7 +123,7 @@ export function VistoriaForm({ inicial, fotosIniciais }: { inicial: Vistoria; fo
       </div>
 
       <Secao n={1} titulo="Identificação do imóvel">
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <Campo label="Condomínio/Edifício" className="sm:col-span-2"><input className="campo" {...campo("edificio")} /></Campo>
           <Campo label="Endereço" className="sm:col-span-2"><input className="campo" {...campo("endereco")} /></Campo>
           <Campo label="Número do apartamento"><input className="campo" {...campo("apartamento")} /></Campo>
@@ -132,7 +132,7 @@ export function VistoriaForm({ inicial, fotosIniciais }: { inicial: Vistoria; fo
           <Campo label="Corretor(a) responsável"><input className="campo" {...campo("corretor")} /></Campo>
           <Campo label="Área privativa (m²)"><input inputMode="decimal" className="campo" {...campo("area_privativa")} /></Campo>
           <Campo label="Vaga(s)"><input inputMode="numeric" className="campo" {...campo("vagas")} /></Campo>
-          <Campo label="Situação" className="sm:col-span-2">
+          <Campo label="Situação" className="sm:col-span-2 lg:col-span-4">
             <Opcoes
               opcoes={[["ocupado", "Ocupado"], ["desocupado", "Desocupado"]]}
               valor={v.situacao ?? ""}
@@ -143,13 +143,13 @@ export function VistoriaForm({ inicial, fotosIniciais }: { inicial: Vistoria; fo
       </Secao>
 
       <Secao n={2} titulo="Checklist de conservação" extra={<Legenda />}>
-        <div className="space-y-4">
+        <div className="grid items-start gap-4 xl:grid-cols-2">
           {AMBIENTES.map((a) => {
             const amb = d.ambientes[a.id];
             return (
               <div key={a.id} className="rounded-md border bg-surface p-4">
                 <div className="mb-2 flex items-center justify-between gap-3">
-                  <h3 className="font-display text-[17px] font-bold text-brand">{a.nome}</h3>
+                  <h3 className="font-display text-base font-bold text-brand">{a.nome}</h3>
                   <button
                     type="button"
                     className="text-xs font-semibold text-sage hover:text-brand"
@@ -205,7 +205,7 @@ export function VistoriaForm({ inicial, fotosIniciais }: { inicial: Vistoria; fo
           </button>
         }
       >
-        <ul className="divide-y rounded-md border bg-surface px-4">
+        <ul className="grid rounded-md border bg-surface px-4 lg:grid-cols-2 lg:gap-x-8 [&>li]:border-b [&>li]:border-line">
           {TESTES.map((t, i) => (
             <LinhaCondicao key={i} texto={t} valor={d.testes[i] ?? ""} onChange={(c) => setD({ ...d, testes: { ...d.testes, [i]: c } })} />
           ))}
@@ -213,7 +213,7 @@ export function VistoriaForm({ inicial, fotosIniciais }: { inicial: Vistoria; fo
       </Secao>
 
       <Secao n={4} titulo="Avarias, defeitos e pendências">
-        <div className="space-y-3">
+        <div className="grid items-start gap-3 lg:grid-cols-2">
           {d.ocorrencias.map((o, i) => {
             const set = (patch: Partial<typeof o>) =>
               setD({ ...d, ocorrencias: d.ocorrencias.map((x, j) => (j === i ? { ...x, ...patch } : x)) });
@@ -245,7 +245,7 @@ export function VistoriaForm({ inicial, fotosIniciais }: { inicial: Vistoria; fo
           })}
           <button
             type="button"
-            className="btn w-full"
+            className="btn w-full lg:col-span-2"
             onClick={() => setD({ ...d, ocorrencias: [...d.ocorrencias, { ambiente: "", descricao: "", foto: "", providencia: "" }] })}
           >
             <Plus /> Adicionar ocorrência
@@ -295,7 +295,7 @@ export function VistoriaForm({ inicial, fotosIniciais }: { inicial: Vistoria; fo
       </div>
 
       <div className="fixed inset-x-0 bottom-0 z-20 border-t bg-surface/95 backdrop-blur">
-        <div className="mx-auto flex max-w-3xl items-center justify-between gap-3 px-4 py-3">
+        <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3">
           <StatusSalvo status={status} />
           <div className="flex gap-2">
             <Link href={`/vistorias/${v.id}`} className={`btn ${status === "pendente" || status === "salvando" ? "pointer-events-none opacity-50" : ""}`}>
@@ -316,8 +316,8 @@ export function VistoriaForm({ inicial, fotosIniciais }: { inicial: Vistoria; fo
 function Secao({ n, titulo, extra, children }: { n: number; titulo: string; extra?: React.ReactNode; children: React.ReactNode }) {
   return (
     <section className="pt-2">
-      <div className="mb-3 flex items-end justify-between gap-3 border-b-2 border-brand pb-2">
-        <h2 className="font-display text-lg font-bold text-brand">
+      <div className="mb-3 flex flex-wrap items-end justify-between gap-x-3 gap-y-2 border-b-2 border-brand pb-2">
+        <h2 className="font-display text-[17px] font-bold text-brand">
           <span className="mr-2 text-sage">{n}.</span>
           {titulo}
         </h2>
@@ -340,7 +340,7 @@ function Campo({ label, className = "", children }: { label: string; className?:
 function LinhaCondicao({ texto, valor, onChange, destaque }: { texto: string; valor: Condicao; onChange: (c: Condicao) => void; destaque?: boolean }) {
   return (
     <li className={`flex flex-wrap items-center justify-between gap-x-3 gap-y-2 py-2.5 ${destaque ? "font-semibold" : ""}`}>
-      <span className="min-w-0 flex-1 basis-48 text-[15px]">{texto}</span>
+      <span className="min-w-0 flex-1 basis-48 text-sm">{texto}</span>
       <div className="flex gap-1">
         {CONDICOES.map((c) => (
           <button
